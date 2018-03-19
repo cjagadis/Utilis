@@ -1,0 +1,36 @@
+{  
+   "name":"Otter Build Configuration",
+   "version":"0.1",
+   "env":"staging",
+   "status":"active",
+   "date":"",
+   "instances":[  
+      {  
+         "name":"appserver",
+         "LB":"",
+         "LB-IP":"", 
+         "repository":"Application_Server",
+         "branch":"sprint10",
+         "tag":"0.7",
+         "prefix":"appserver",
+         "build":"1",
+		 "image":"appserver0.4",
+         "subnetwork":"switcher-demo-2",
+	     "status":"active",
+	     "date":""
+      },
+      {  
+         "name":"switcher",
+         "repository":"Switcher_server",
+         "branch":"",
+         "tag":"0.8",
+         "image":"",
+         "prefix":"switcherserver",
+         "build":"1",
+         "subnetwork":"switcher-demo-2",
+         "status":"",
+	     "date":""
+      }
+   ]
+}
+
