@@ -1,6 +1,7 @@
 import json
 import argparse
 import logging as log
+import os
 import subprocess
 import time
 
@@ -22,18 +23,43 @@ switchServerBuild = False
 '''
 buildOrder = ["rtmpserver", "switcherserver", "routerserver", "appserver"]
 
+''' All the  scripts we need
+    to call is built as a key-value pair
+    in the build order. We do this to check
+    if all the build requess are correct for
+    we do not want to build anything till we make
+    sure all requests are good
+'''
+buildScript = {}
 
-''' Get the list of images
-    form Google Cloud and match the
-    img. If the image exist
-    return true
+# list of prebuilt images on existing google cloud
+images = []
+
+# build the list of images on google cloud
+# A list of lines containng images is returned
+# the first word in each line is the image
+def buildImageList():
+    log.info("buildImageList:list of images")
+    imgList = os.popen('gcloud compute images list').readlines()
+    for text in imgList:
+        text = text.split()
+        images.append(text[0])
+    log.debug(images)
+    log.info(("number of images found = ") + str(len(images)))
+
+'''Check the image 
+   agains the global list imgLIst
+   If the image exist return true
 '''
 def checkImages(img):
-    imageListCmd = "gcloud image list"
-    testCmd = "ls -l"
-    process = subprocess.Popen(testCmd.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    print(output)
+    log.info("in ckeckImages")
+    log.debug(img)
+    for i in images:
+        if i == img:
+            log.info("checkImages:image matcheda")
+            return True 
+    return False
+
 
 parser = argparse.ArgumentParser()
 
@@ -69,6 +95,9 @@ otterStatus = buildDict["status"]
 otterDate   = buildDict["date"]
 otterInst   = buildDict["instances"]
 
+# Build Google Image List and set it to global variable images
+buildImageList()
+
 def buildApplication(appInst,app):
     log.info("buildApplication: building the " + app)
     log.info("buildingapplication: appInstance ")
@@ -84,13 +113,19 @@ def buildApplication(appInst,app):
         scriptName = appInst["prefix"] + ".sh " + imageOption + " -b " \
                         + branch + " -t " + appInst["tag"] + " -s " \
                         + appInst["subnetwork"]
+        buildScript[appInst["prefix"]] = scriptName
+
     else:                                           # image is specified
         log.info("buildApplication: Image = " + appInst["image"])
-
+        if (checkImages(appInst["image"])):
+            log.info("matched the image")
+        else:
+            log.info("image was not matched")
         imageOption = " -i "     # use existing image
         scriptName = appInst["prefix"] + ".sh " + imageOption \
                       + appInst["image"] + " -s "  \
                       + appInst["subnetwork"]
+        buildScript[appInst["prefix"]] = scriptName
     log.info("buildApplication: script called = " + scriptName)
 
 '''If the globa status is active, all the
@@ -141,3 +176,5 @@ for b in buildOrder:
         log.info("matched the application: " +b)
         i = buildKV[b]     # get the index of instance
         buildApplication(otterInst[i],b)
+
+log.info(buildScript)
