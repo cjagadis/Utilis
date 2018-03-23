@@ -98,11 +98,16 @@ otterInst   = buildDict["instances"]
 # Build Google Image List and set it to global variable images
 buildImageList()
 
+'''Build the command list
+   as key value pair. The
+   key used is the application
+   prefix For example: "appserver" for 
+   application server, etc
+'''
 def buildApplication(appInst,app):
     log.info("buildApplication: building the " + app)
     log.info("buildingapplication: appInstance ")
     log.info(appInst)
-    
     if appInst["image"] == "":                      # if the image is not set
         imageOption = "-n"                          # build a new image
         if appInst["branch"] == "":
@@ -128,7 +133,40 @@ def buildApplication(appInst,app):
         buildScript[appInst["prefix"]] = scriptName
     log.info("buildApplication: script called = " + scriptName)
 
-'''If the globa status is active, all the
+def callScripts():
+    for b in buildOrder:
+        if b in buildScript: # the application needs to be built
+            cmd = buildScript[b]
+            log.info("buildScripts: " +  "building " + cmd)
+        # construct the string to call the google cloud shell
+            gc =  "gcloud --quiet compute ssh --ssh-key-file=~/.ssh/compute_engine jagadish@demo4 --zone us-central1-c --command " + cmd
+            log.info("buildScripts:command to be executed by google shell")
+            log.info(gc)
+            # ret = os.system(gc)
+            ret = 0
+            if (ret == 0):
+                print("cmd" + " ran successfully")
+            else:
+                log.Fatal("Build Failed")
+                return False 
+    return True
+
+
+'''The Josn file will have updated
+   time and build numbe
+'''
+def updateJsonTimeBuild():
+    log.info("updateJsonTimeBuild:")
+    for inst in otterInst:
+        if inst["prefix"] in buildScript:       # the server that was built
+            log.info("updateJsonTimeuild:json for server updated")
+            log.debug(inst)
+            buildNumber = int(inst["build"])    # convert string to integer
+            buildNumber = buildNumber + 1
+            inst["build"] = str(buildNumber)    # build number in incremented
+            log.info("updateJsonTime:New build number" + inst["build"])
+
+'''If the global status is active, all the
    applications in Json file is build even if they
    have inddividual status as inactive. The global
    active status overrides the individual application
@@ -167,7 +205,8 @@ else:            # global status is not active
 ''' The KV pair of servers that need to built
     is captured. We now have to match the order
     in which the servers have to be built and
-    the creates the script and build
+    the creates the script and build. The global
+    buildScript has all the scripts that will be called
 '''
 
 for b in buildOrder:
@@ -178,3 +217,9 @@ for b in buildOrder:
         buildApplication(otterInst[i],b)
 
 log.info(buildScript)
+
+
+val = callScripts()
+if val == True:
+    log.info("Build was successful")
+    updateJsonTimeBuild()       # update JSON build number and time
