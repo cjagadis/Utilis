@@ -77,15 +77,14 @@ args = parser.parse_args()
 
 # set up logging
 log.basicConfig(level=args.loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
-log.info("in the build.py file")
+log.info("main:in the build.py file")
 
-log.debug('argument file = '+ args.file)
+log.debug('main:argument file = '+ args.file)
 
 with open(args.file, 'r') as buildFile:
     buildDict = json.load(buildFile)
-
-for b in buildDict:
-    print(b)
+    log.debug("main:json file")
+    log.debug(buildDict)
 
 # JSON Variables
 otterName   = buildDict["name"]
@@ -137,10 +136,10 @@ def callScripts():
     for b in buildOrder:
         if b in buildScript: # the application needs to be built
             cmd = buildScript[b]
-            log.info("buildScripts: " +  "building " + cmd)
+            log.info("callScripts: " +  "building " + cmd)
         # construct the string to call the google cloud shell
             gc =  "gcloud --quiet compute ssh --ssh-key-file=~/.ssh/compute_engine jagadish@demo4 --zone us-central1-c --command " + cmd
-            log.info("buildScripts:command to be executed by google shell")
+            log.info("callScripts:command to be executed by google shell")
             log.info(gc)
             # ret = os.system(gc)
             ret = 0
@@ -164,7 +163,11 @@ def updateJsonTimeBuild():
             buildNumber = int(inst["build"])    # convert string to integer
             buildNumber = buildNumber + 1
             inst["build"] = str(buildNumber)    # build number in incremented
-            log.info("updateJsonTime:New build number" + inst["build"])
+            log.info("updateJsonTime:New build number = " + inst["build"])
+    log.info("updateJsonTime:updating Json file")
+    with open(args.file, 'w') as outfile:  
+        json.dump(buildDict, outfile)           # buildDict has the entire Json File
+
 
 '''If the global status is active, all the
    applications in Json file is build even if they
