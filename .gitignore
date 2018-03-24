@@ -1,0 +1,6 @@
+*pycache*
+*.com
+*.dll
+*.so
+/build2
+/build3
