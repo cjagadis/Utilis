@@ -3,6 +3,9 @@ import argparse
 import json
 import logging as log
 
+'''API Testing Framework
+'''
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-d', '--debug',
