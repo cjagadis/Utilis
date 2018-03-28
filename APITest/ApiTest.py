@@ -1,19 +1,24 @@
 import requests
+import argparse
 import json
 import logging as log
 
-args = p.parse_args()
+parser = argparse.ArgumentParser()
 
-if args.verbose:
-    log.basicConfig(format="%(levelname)s: %(message)s", level=log.DEBUG)
-    log.info("Verbose output.")
-else:
-    log.basicConfig(format="%(levelname)s: %(message)s")
+parser.add_argument('-d', '--debug',
+       help="print debugging statements",
+       action="store_const", dest="loglevel", const=log.DEBUG,
+       default=log.WARNING,
+)
+parser.add_argument('-v', '--verbose',
+       help="verbose",
+       action="store_const", dest="loglevel", const=log.INFO,
+)
+args = parser.parse_args()
 
-log.info("This should be verbose.")
-log.warning("This is a warning.")
-log.error("This is an error.")
+log.basicConfig(level=args.loglevel, format='%(asctime)s - %(levelname)s" - %(message)s')
 
+log.info("main:APITest")
 
 '''Set up the URL, payload, and header
    And then make the login post call
