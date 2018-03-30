@@ -4,8 +4,8 @@ from sanic.response import json
 '''Simulation of LB HTTP Server
    It is done using Sanic package
    This does not work on Windows
-   Testrouted.py is the agent that
-   recieves request from the testforward.py
+   routeragent.py is the agent that
+   recieves request from lbrouter.py
 '''
 
 app = Sanic()
