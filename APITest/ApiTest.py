@@ -1,7 +1,30 @@
 import requests
+import argparse
 import json
 import logging as log
 
+<<<<<<< HEAD
+=======
+'''API Testing Framework
+'''
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-d', '--debug',
+       help="print debugging statements",
+       action="store_const", dest="loglevel", const=log.DEBUG,
+       default=log.WARNING,
+)
+parser.add_argument('-v', '--verbose',
+       help="verbose",
+       action="store_const", dest="loglevel", const=log.INFO,
+)
+args = parser.parse_args()
+
+log.basicConfig(level=args.loglevel, format='%(asctime)s - %(levelname)s" - %(message)s')
+
+log.info("main:APITest")
+>>>>>>> 98a5ffd37eb9e76dcbb43306259d2143055d477c
 
 '''Set up the URL, payload, and header
    And then make the login post call

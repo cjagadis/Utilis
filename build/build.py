@@ -1,143 +1,111 @@
 import json
 import argparse
 import logging as log
+import os
 import subprocess
 import time
+import settings
+import buildimg
+import buildapp
+import callscripts
+import updatejson
 
-# Instance KV Variables
-instanceInfo = {}
+if __name__ ==  '__main__':
+    print("calling init")
+    settings.init()
+    parser = argparse.ArgumentParser()
 
-# Build Variables
-otterBuildAll = False
-appServerBuild = False
-routerServerBuild = False
-rtmpServerBuild = False
-switchServerBuild = False
+    parser.add_argument('-d', '--debug',
+             help="print debugging statements",
+             action="store_const", dest="loglevel", const=log.DEBUG,
+             default=log.WARNING,
+    )
+    parser.add_argument('-v', '--verbose',
+             help="verbose",
+             action="store_const", dest="loglevel", const=log.INFO,
+    )
+    parser.add_argument("-f", "--file", type=str, required=True)
+    args = parser.parse_args()
 
-'''build Order - the order which the build serveres needs to build
-   It is impoortan to have prefix name in JSON which is used below
-   It is not required to have all applications to be built. The order
-   however will be followed for configurationn are dependent on the
-   order of the build.
-'''
-buildOrder = ["rtmpserver", "switcherserver", "routerserver", "appserver"]
+    # set up logging
+    log.basicConfig(level=args.loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
+    log.info("main:in the build.py file")
+
+    log.debug('main:argument file = '+ args.file)
+
+    # read the build json file - build.json
+
+    with open(args.file, 'r') as buildFile:
+        buildDict = json.load(buildFile)
+        log.debug("main:json file")
+        log.debug(buildDict)
+
+    # JSON Variables extracted from JSON build file
+    otterName   = buildDict["name"]
+    otterVers   = buildDict["version"]
+    otterEnv    = buildDict["env"]
+    otterStatus = buildDict["status"]
+    otterDate   = buildDict["date"]
+    otterInst   = buildDict["instances"]
+
+    # Build Google Image List and set it to global variable images
+    buildimg.buildImageList()
 
 
-''' Get the list of images
-    form Google Cloud and match the
-    img. If the image exist
-    return true
-'''
-def checkImages(img):
-    imageListCmd = "gcloud image list"
-    testCmd = "ls -l"
-    process = subprocess.Popen(testCmd.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    print(output)
+    '''If the global status is active, all the
+        applications in Json file is build even if they
+        have inddividual status as inactive. The global
+        active status overrides the individual application
+        status. 
+    '''
+    if otterStatus == "active":
+        otterBuildAll = True
+        log.info("main:global build status is active")
+        log.info("main:all server builds are requested")
 
-parser = argparse.ArgumentParser()
+        # check instances to built and should be in order
+        # format is: {"appserver':1, "switcherserver:"2, etc}
+        # they can be in any order, but we hve to force the build order as
+        # rtmp - switcher - router - appserver
+        # And this is specified in the buildOrder global
 
-parser.add_argument('-d', '--debug',
-    help="print debugging statements",
-    action="store_const", dest="loglevel", const=log.DEBUG,
-    default=log.WARNING,
-)
-parser.add_argument('-v', '--verbose',
-    help="verbose",
-    action="store_const", dest="loglevel", const=log.INFO,
-)
-parser.add_argument("-f", "--file", type=str, required=True)
-args = parser.parse_args()
-
-# set up logging
-log.basicConfig(level=args.loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
-log.info("in the build.py file")
-
-log.debug('argument file = '+ args.file)
-
-with open(args.file, 'r') as buildFile:
-    buildDict = json.load(buildFile)
-
-for b in buildDict:
-    print(b)
-
-# JSON Variables
-otterName   = buildDict["name"]
-otterVers   = buildDict["version"]
-otterEnv    = buildDict["env"]
-otterStatus = buildDict["status"]
-otterDate   = buildDict["date"]
-otterInst   = buildDict["instances"]
-
-def buildApplication(appInst,app):
-    log.info("buildApplication: building the " + app)
-    log.info("buildingapplication: appInstance ")
-    log.info(appInst)
-    
-    if appInst["image"] == "":                      # if the image is not set
-        imageOption = "-n"                          # build a new image
-        if appInst["branch"] == "":
-            branch = "main"
-            log.info("buildApplication: branch = " + branch)
-        else: 
-            branch = appInst["branch"]
-        scriptName = appInst["prefix"] + ".sh " + imageOption + " -b " \
-                        + branch + " -t " + appInst["tag"] + " -s " \
-                        + appInst["subnetwork"]
-    else:                                           # image is specified
-        log.info("buildApplication: Image = " + appInst["image"])
-
-        imageOption = " -i "     # use existing image
-        scriptName = appInst["prefix"] + ".sh " + imageOption \
-                      + appInst["image"] + " -s "  \
-                      + appInst["subnetwork"]
-    log.info("buildApplication: script called = " + scriptName)
-
-'''If the globa status is active, all the
-   applications in Json file is build even if they
-   have inddividual status as inactive. The global
-   active status overrides the individual application
-   status. 
-'''
-if otterStatus == "active":
-    otterBuildAll = True
-    log.info("global build status is active")
-    log.info("all server builds are requested")
-
-    # check instances to built and should be in order
-    # format is: {"appserver':1, "switcherserver:"2, etc}
-    # they can be in any order, but we hve to force the build order as
-    # rtmp - switcher - router - appserver
-    # And this is specified in the buildOrder global
-
-    buildKV = {}    # server key value pair
-    i = 0           # value of the server  - order which they appear in jsone
-    for inst in otterInst:
-        buildKV[inst["prefix"]] = i
-        i = i+1
-    log.info("build list from JSON as Key-Value pair as below")
-    log.info(buildKV)
-else:            # global status is not active
-    log.info("global build status is not active")
-    log.info("check for individual app build status for active")
-    buildKV = {}    # server key value pair
-    i = 0           # value of the server  - order which they appear in jsone
-    for inst in otterInst:
-        if inst["status"] == "active":  # only build apps with active stats
+        buildKV = {}    # server key value pair
+        i = 0           # value of the server  - order which they appear in jsone
+        for inst in otterInst:
             buildKV[inst["prefix"]] = i
             i = i+1
-    log.info("build list from JSON as Key-Value pair as below with global active not set")
-    log.info(buildKV)
+            log.info("main:build list from JSON as Key-Value pair as below")
+        log.info(buildKV)
+    else:            # global status is not active
+        log.info("main:global build status is not active")
+        log.info("main:check for individual app build status for active")
+        buildKV = {}    # server key value pair
+        i = 0           # value of the server  - order which they appear in jsone
+        for inst in otterInst:
+            if inst["status"] == "active":  # only build apps with active stats
+                buildKV[inst["prefix"]] = i
+                i = i+1
+        log.info("main:build list from JSON as Key-Value pair as below with global active not set")
+        log.info(buildKV)
 
-''' The KV pair of servers that need to built
-    is captured. We now have to match the order
-    in which the servers have to be built and
-    the creates the script and build
-'''
+    ''' The KV pair of servers that need to built
+        is captured. We now have to match the order
+        in which the servers have to be built and
+        the creates the script and build. The global
+        buildScript has all the scripts that will be called
+    '''
 
-for b in buildOrder:
-    log.info("before build application: " + b)
-    if b in buildKV:       # check if the application needs to be built
-        log.info("matched the application: " +b)
-        i = buildKV[b]     # get the index of instance
-        buildApplication(otterInst[i],b)
+    for b in settings.buildOrder:
+        log.info("main:before build application: " + b)
+        if b in buildKV:       # check if the application needs to be built
+            log.info("main:matched the application: " +b)
+            i = buildKV[b]     # get the index of instance
+            buildapp.buildApplication(otterInst[i],b)
+
+    log.info(settings.buildScript)
+
+
+    val = callscripts.callScripts()
+    if val == True:
+        log.info("Build was successful")
+        updatejson.updateJsonTimeBuild(args.file, buildDict)       # update JSON build number and time

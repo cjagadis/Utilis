@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {  
    "name":"Otter Build Configuration",
    "version":"0.1",
@@ -58,6 +57,3 @@
       }
 }
 
-=======
-{"status": "active", "date": "", "instances": [{"image": "appserver0.4", "prefix": "appserver", "build": "3", "name": "appserver", "LB-IP": "", "tag": "0.7", "status": "active", "repository": "Application_Server", "date": "", "LB": "", "branch": "sprint10", "subnetwork": "switcher-demo-2"}, {"tag": "0.8", "status": "", "repository": "Switcher_server", "date": "", "prefix": "switcherserver", "image": "", "build": "3", "name": "switcher", "subnetwork": "switcher-demo-2", "branch": ""}], "version": "0.1", "name": "Otter Build Configuration", "env": "staging"}
->>>>>>> 98a5ffd37eb9e76dcbb43306259d2143055d477c
