@@ -10,7 +10,11 @@ url = 'http://35.193.187.38:8080/api/login'
 payload = {"email":"shafeek@moogilu.com", "password":"123"}
 headers = {'Content-Type': 'application/json'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
+print("status code")
+print(r.status_code)
 data = r.json()
+print("json format")
+print(data)
 tkn = ""   # API token
 
 
