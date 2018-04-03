@@ -9,7 +9,7 @@
             "LB": "",
             "LB-IP": "",
             "branch": "release",
-            "build": "10",
+            "build": "11",
             "date": "",
             "image": "",
             "name": "appserver",
@@ -21,7 +21,7 @@
         },
         {
             "branch": "release",
-            "build": "3",
+            "build": "4",
             "date": "",
             "image": "",
             "name": "switcher",

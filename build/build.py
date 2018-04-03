@@ -41,11 +41,11 @@ if __name__ ==  '__main__':
         log.debug(buildDict)
 
     # JSON Variables extracted from JSON build file
-    otterName   = buildDict["name"]
-    otterVers   = buildDict["version"]
-    otterEnv    = buildDict["env"]
-    otterStatus = buildDict["status"]
-    otterDate   = buildDict["date"]
+    otterName   = buildDict["g-name"]
+    otterVers   = buildDict["g-version"]
+    otterEnv    = buildDict["g-env"]
+    otterStatus = buildDict["g-status"]
+    otterDate   = buildDict["g-date"]
     otterInst   = buildDict["instances"]
 
     # Build Google Image List and set it to global variable images
