@@ -1,12 +1,15 @@
 {
-    "date": "",
-    "env": "staging",
+    "g-date": "",
+    "g-env": "staging",
+    "g-name": "Otter Build Configuration",
+    "g-status": "",
+    "g-version": "0.1",
     "instances": [
         {
             "LB": "",
             "LB-IP": "",
             "branch": "release",
-            "build": "9",
+            "build": "10",
             "date": "",
             "image": "",
             "name": "appserver",
@@ -18,7 +21,7 @@
         },
         {
             "branch": "release",
-            "build": "2",
+            "build": "3",
             "date": "",
             "image": "",
             "name": "switcher",
@@ -52,8 +55,5 @@
             "subnetwork": "switcher-demo-2",
             "tag": ""
         }
-    ],
-    "name": "Otter Build Configuration",
-    "status": "",
-    "version": "0.1"
+    ]
 }
