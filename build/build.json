@@ -9,38 +9,38 @@
             "LB": "",
             "LB-IP": "",
             "branch": "release",
-            "build": "11",
+            "build": "1",
             "date": "",
             "image": "",
             "name": "appserver",
             "prefix": "appserver",
             "repository": "Application_Server",
             "status": "active",
-            "subnetwork": "switcher-demo-2",
+            "subnetwork": "switcher-demo",
             "tag": ""
         },
         {
             "branch": "release",
-            "build": "4",
+            "build": "10",
             "date": "",
             "image": "",
             "name": "switcher",
             "prefix": "switcherserver",
             "repository": "Switcher_server",
             "status": "",
-            "subnetwork": "switcher-demo-2",
+            "subnetwork": "switcher-demo",
             "tag": ""
         },
         {
             "branch": "release",
             "build": "1",
             "date": "",
-            "image": "",
+            "image": "otter-nginx1",
             "name": "rtmpserver",
-            "prefix": "otter-nginx1",
-            "repository": "Switcher_server",
-            "status": "",
-            "subnetwork": "switcher-demo-2",
+            "prefix": "rtmpserver",
+            "repository": "Nginx_Rtmp_Server",
+            "status": "active",
+            "subnetwork": "switcher-demo",
             "tag": ""
         },
         {
@@ -51,8 +51,8 @@
             "name": "router",
             "prefix": "routerserver",
             "repository": "Switcher_server",
-            "status": "active",
-            "subnetwork": "switcher-demo-2",
+            "status": "",
+            "subnetwork": "switcher-demo",
             "tag": ""
         }
     ]
