@@ -70,8 +70,8 @@ if __name__ ==  '__main__':
         # And this is specified in the buildOrder global
 
         buildKV = {}    # server key value pair
-        i = 0           # value of the server  - order which they appear in jsone
         for inst in otterInst:
+            i = 0           # value of the server  - order which they appear in jsone
             buildKV[inst["prefix"]] = i
             i = i+1
             log.info("main:build list from JSON as Key-Value pair as below")
@@ -84,7 +84,7 @@ if __name__ ==  '__main__':
         for inst in otterInst:
             if inst["status"] == "active":  # only build apps with active stats
                 buildKV[inst["prefix"]] = i
-                i = i+1
+            i = i+1
         log.info("main:build list from JSON as Key-Value pair as below with global active not set")
         log.info(buildKV)
 
