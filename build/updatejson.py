@@ -19,7 +19,9 @@ def updateJsonTimeBuild(file, buildDict):
             inst["build"] = str(buildNumber)    # build number in incremented
             log.info("updateJsonTime:New build number = " + inst["build"])
     log.info("updateJsonTime:updating Json file")
+
     with open(file, 'w') as outfile:  
-        json.dump(buildDict,indent=4,  outfile)           # buildDict has the entire Json File
+        res = json.dump(buildDict, outfile, sort_keys=True, indent=4, separators=(',', ': '))
+        # json.dump(buildDict,outfile)           # buildDict has the entire Json File
 
 

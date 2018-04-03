@@ -1,63 +1,59 @@
-<<<<<<< HEAD
-{  
-   "name":"Otter Build Configuration",
-   "version":"0.1",
-   "env":"staging",
-   "status":"",
-   "date":"",
-   "instances":[  
-      {  
-         "name":"appserver",
-         "LB":"",
-         "LB-IP":"", 
-         "repository":"Application_Server",
-         "branch":"release",
-         "tag":"",
-         "prefix":"appserver",
-         "build":"1",
-		 "image":"",
-         "subnetwork":"switcher-demo-2",
-	     "status":"active",
-	     "date":""
-      },
-      {  
-         "name":"switcher",
-         "repository":"Switcher_server",
-         "branch":"release",
-         "tag":"",
-         "image":"",
-         "prefix":"switcherserver",
-         "build":"1",
-         "subnetwork":"switcher-demo-2",
-         "status":"",
-	     "date":""
-      },
-	  {  
-         "name":"rtmpserver",
-         "repository":"Switcher_server",
-         "branch":"release",
-         "tag":"",
-         "image":"",
-         "prefix":"otter-nginx1",
-         "build":"1",
-         "subnetwork":"switcher-demo-2",
-         "status":"",
-	     "date":""
-      },
-	  {  
-         "name":"router",
-         "repository":"Switcher_server",
-         "branch":"release",
-         "tag":"",
-         "image":"",
-         "prefix":"router",
-         "build":"1",
-         "subnetwork":"switcher-demo-2",
-         "status":"active",
-	     "date":""
-      }
+{
+    "date": "",
+    "env": "staging",
+    "instances": [
+        {
+            "LB": "",
+            "LB-IP": "",
+            "branch": "release",
+            "build": "7",
+            "date": "",
+            "image": "",
+            "name": "appserver",
+            "prefix": "appserver",
+            "repository": "Application_Server",
+            "status": "active",
+            "subnetwork": "switcher-demo-2",
+            "tag": ""
+        },
+        {
+            "branch": "release",
+            "build": "1",
+            "date": "",
+            "image": "",
+            "name": "switcher",
+            "prefix": "switcherserver",
+            "repository": "Switcher_server",
+            "status": "",
+            "subnetwork": "switcher-demo-2",
+            "tag": ""
+        },
+        {
+            "branch": "release",
+            "build": "1",
+            "date": "",
+            "image": "",
+            "name": "rtmpserver",
+            "prefix": "otter-nginx1",
+            "repository": "Switcher_server",
+            "status": "",
+            "subnetwork": "switcher-demo-2",
+            "tag": ""
+        },
+        {
+            "branch": "release",
+            "build": "1",
+            "date": "",
+            "image": "",
+            "name": "router",
+            "prefix": "router",
+            "repository": "Switcher_server",
+            "status": "active",
+            "subnetwork": "switcher-demo-2",
+            "tag": ""
+        }
+    ],
+    "name": "Otter Build Configuration",
+    "status": "",
+    "version": "0.1"
 }
-
-=======
-{"status": "active", "date": "", "instances": [{"image": "appserver0.4", "prefix": "appserver", "build": "3", "name": "appserver", "LB-IP": "", "tag": "0.7", "status": "active", "repository": "Application_Server", "date": "", "LB": "", "branch": "sprint10", "subnetwork": "switcher-demo-2"}, {"tag": "0.8", "status": "", "repository": "Switcher_server", "date": "", "prefix": "switcherserver", "image": "", "build": "3", "name": "switcher", "subnetwork": "switcher-demo-2", "branch": ""}], "version": "0.1", "name": "Otter Build Configuration", "env": "staging"}
->>>>>>> 98a5ffd37eb9e76dcbb43306259d2143055d477c
