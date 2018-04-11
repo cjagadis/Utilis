@@ -1,5 +1,6 @@
 import settings
 import logging as log
+import os
 
 def callScripts():
     for b in settings.buildOrder:
@@ -7,10 +8,11 @@ def callScripts():
             cmd = settings.buildScript[b]
             log.info("callScripts: " +  "building " + cmd)
         # construct the string to call the google cloud shell
-            gc =  "gcloud --quiet compute ssh --ssh-key-file=~/.ssh/compute_engine jagadish@demo4 --zone us-central1-c --command " + cmd
+ #           gc =  "gcloud --quiet compute ssh --ssh-key-file=~/.ssh/compute_engine jagadish@souvitestingdemo3 --zone us-central1-c --command " + "/home/kaushikaon/" + cmd 
+            gc =  "/home/kaushikaon/" + cmd 
             log.info("callScripts:command to be executed by google shell")
             log.info(gc)
-            # ret = os.system(gc)
+            ret = os.system(gc)
             ret = 0
             if (ret == 0):
                 print("cmd" + " ran successfully")
