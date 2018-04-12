@@ -12,7 +12,7 @@ def callScripts():
             gc =  "/home/kaushikaon/" + cmd 
             log.info("callScripts:command to be executed by google shell")
             log.info(gc)
-            ret = os.system(gc)
+#            ret = os.system(gc)
             ret = 0
             if (ret == 0):
                 print("cmd" + " ran successfully")
