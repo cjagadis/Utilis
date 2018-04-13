@@ -3,8 +3,6 @@ import argparse
 import json
 import logging as log
 
-<<<<<<< HEAD
-=======
 '''API Testing Framework
 '''
 
