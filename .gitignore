@@ -4,3 +4,6 @@
 *.so
 /build2
 /build3
+*playpen*
+*test.py*
+*.out

@@ -22,12 +22,11 @@ args = parser.parse_args()
 log.basicConfig(level=args.loglevel, format='%(asctime)s - %(levelname)s" - %(message)s')
 
 log.info("main:APITest")
->>>>>>> 98a5ffd37eb9e76dcbb43306259d2143055d477c
 
 '''Set up the URL, payload, and header
    And then make the login post call
 '''
-url = 'http://35.193.187.38:8080/api/login'
+url = 'http://demo-appserver.otter.network:8080/api/login'
 payload = {"email":"shafeek@moogilu.com", "password":"123"}
 headers = {'Content-Type': 'application/json'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
