@@ -11,14 +11,14 @@ from mysql.connector import errorcode
 # globals
 # connect with Staging
 rp = redis.StrictRedis(host='35.193.241.194', port=6379,
-    password='7913511eca0b03a225a5d9cc60ce65800f3c37b059116898b189acbcd54cdcb6')
+    password='change')
 
 rr = redis.Redis(host='35.193.241.194', port=6379,
-    password='7913511eca0b03a225a5d9cc60ce65800f3c37b059116898b189acbcd54cdcb6')
+    password='change')
 
 # connect with Perf
 rs = redis.StrictRedis(host='35.232.62.92', port=6379,
-    password='a304a11072df60bca0a14666528e79636336b0692fd8ecd98c33e79b99ccb2c0')
+    password='change')
 
 # Output files
 fswitch = "switcher.csv"
@@ -103,9 +103,9 @@ def initData(debug=False):
 # Connect to MySql DB
 def connectMySQL():
     try:
-        cnx = mysql.connector.connect(user='apidevuser', password='DevApp@9967',
+        cnx = mysql.connector.connect(user='', password='x@9967',
                               host='35.192.65.205',
-                              database='otter')    
+                              database='')    
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Something is wrong with your user name or password")
@@ -218,12 +218,3 @@ for key in rp.scan_iter():
 '''
 
 
-
-
-#"redis_host":"35.193.241.194",
-# "redis_port":"6379",
-# "vm_api_url": "http://35.232.60.100:1936", 
-# "redis_password":"7913511eca0b03a225a5d9cc60ce65800f3c37b059116898b189acbcd54cdcb6"
-#SWITCHER_REDIS_HOST='35.232.62.92'
-#SWITCHER_REDIS_PORT='6379'
-#SWITCHER_REDIS_PASSWORD='a304a11072df60bca0a14666528e79636336b0692fd8ecd98c33e79b99ccb2c0'
